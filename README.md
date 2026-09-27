@@ -97,16 +97,6 @@ http://127.0.0.1:5000/
 
 ---
 
-## 📸 Screenshots
-
-> Add your dashboard screenshots here.
-
-| Dashboard | Attendance |
-|-----------|------------|
-| ![Dashboard](screenshots/dashboard.png) | ![Attendance](screenshots/attendance.png) |
-
----
-
 ## 🤝 Contributing
 
 Contributions are welcome! Feel free to fork this repo, open issues, or submit pull requests.

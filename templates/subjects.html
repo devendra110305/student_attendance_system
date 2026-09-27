@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card">
+    <h2>Subjects</h2>
+    <form method="POST" class="row-form">
+        <input type="text" name="code" placeholder="Subject Code" required>
+        <input type="text" name="name" placeholder="Subject Name" required>
+        <button type="submit">Add Subject</button>
+    </form>
+
+    <table>
+        <thead>
+            <tr><th>#</th><th>Code</th><th>Name</th><th>Action</th></tr>
+        </thead>
+        <tbody>
+        {% for s in subjects %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ s.code }}</td>
+                <td>{{ s.name }}</td>
+                <td><a class="btn-del" href="{{ url_for('delete_subject', sid=s.id) }}"
+                       onclick="return confirm('Delete this subject?')">Delete</a></td>
+            </tr>
+        {% else %}
+            <tr><td colspan="4" class="empty">No subjects yet.</td></tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

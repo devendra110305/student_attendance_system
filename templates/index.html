@@ -1,0 +1,155 @@
+{% extends "base.html" %}
+{% block content %}
+
+<!-- PARTICLE BACKGROUND -->
+<canvas id="particles"></canvas>
+
+<!-- LIVE CLOCK + GREETING -->
+<div class="live-bar">
+    <div class="live-left">
+        <span class="live-dot"></span>
+        <span class="live-text">LIVE</span>
+        <span class="live-time" id="liveClock">--:--:--</span>
+    </div>
+    <div class="live-right">
+        <span id="greeting">👋 Welcome back, Admin</span>
+        <span class="live-date" id="liveDate"></span>
+    </div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+    <div class="hero-content">
+        <div class="hero-badge">✨ Smart • Fast • Reliable</div>
+        <h2 class="hero-title">Welcome to <span>EduTrack</span> 👋</h2>
+        <p class="hero-subtitle">Your all-in-one attendance companion</p>
+
+        <div class="hero-cta">
+            <a href="{{ url_for('attendance') }}" class="cta-btn cta-primary">✅ Mark Attendance</a>
+            <a href="{{ url_for('report') }}" class="cta-btn cta-ghost">📊 View Reports</a>
+        </div>
+    </div>
+    <div class="hero-blob blob1"></div>
+    <div class="hero-blob blob2"></div>
+    <div class="hero-blob blob3"></div>
+</div>
+
+<!-- STATS -->
+<div class="stat-grid">
+    <a href="{{ url_for('students') }}" class="stat-card sc-blue">
+        <div class="stat-icon">👨‍🎓</div>
+        <div class="stat-info">
+            <h3 data-count="{{ total_students }}">0</h3>
+            <p>Total Students</p>
+        </div>
+    </a>
+    <a href="{{ url_for('subjects') }}" class="stat-card sc-purple">
+        <div class="stat-icon">📚</div>
+        <div class="stat-info">
+            <h3 data-count="{{ total_subjects }}">0</h3>
+            <p>Subjects</p>
+        </div>
+    </a>
+    <a href="{{ url_for('datewise') }}" class="stat-card sc-green">
+        <div class="stat-icon">✅</div>
+        <div class="stat-info">
+            <h3 data-count="{{ today_present }}">0</h3>
+            <p>Present Today</p>
+        </div>
+    </a>
+    <a href="{{ url_for('datewise') }}" class="stat-card sc-red">
+        <div class="stat-icon">❌</div>
+        <div class="stat-info">
+            <h3 data-count="{{ today_absent }}">0</h3>
+            <p>Absent Today</p>
+        </div>
+    </a>
+</div>
+
+<!-- QUICK ACTIONS -->
+<h2 class="section-title">⚡ Quick Actions</h2>
+<div class="feature-grid">
+    <a class="feature-tile ft-blue" href="{{ url_for('students') }}">
+        <div class="ft-icon">👨‍🎓</div>
+        <div class="ft-content"><h3>Students</h3><p>Manage your class</p></div>
+        <div class="ft-arrow">→</div>
+    </a>
+    <a class="feature-tile ft-pink" href="{{ url_for('subjects') }}">
+        <div class="ft-icon">📚</div>
+        <div class="ft-content"><h3>Subjects</h3><p>Your curriculum</p></div>
+        <div class="ft-arrow">→</div>
+    </a>
+    <a class="feature-tile ft-cyan" href="{{ url_for('attendance') }}">
+        <div class="ft-icon">✅</div>
+        <div class="ft-content"><h3>Mark Attendance</h3><p>One-tap marking</p></div>
+        <div class="ft-arrow">→</div>
+    </a>
+    <a class="feature-tile ft-green" href="{{ url_for('datewise') }}">
+        <div class="ft-icon">📅</div>
+        <div class="ft-content"><h3>Date-wise</h3><p>Browse by day</p></div>
+        <div class="ft-arrow">→</div>
+    </a>
+    <a class="feature-tile ft-orange" href="{{ url_for('report') }}">
+        <div class="ft-icon">📊</div>
+        <div class="ft-content"><h3>Reports</h3><p>Percentage & stats</p></div>
+        <div class="ft-arrow">→</div>
+    </a>
+</div>
+
+<!-- DASHBOARD ROW -->
+<div class="dashboard-row">
+    <div class="card panel">
+        <div class="card-head">
+            <h2>🏆 Top Performers</h2>
+            <span class="badge badge-blue">By Attendance %</span>
+        </div>
+
+        {% if top_students %}
+        <ul class="rank-list">
+            {% for s in top_students %}
+            <li>
+                <span class="rank-num rank-{{ loop.index }}">{{ loop.index }}</span>
+                <div class="rank-info">
+                    <strong>{{ s.name }}</strong>
+                    <small>Roll: {{ s.roll_no }}</small>
+                </div>
+                <div class="rank-bar">
+                    <div class="rank-fill" data-pct="{{ s.pct }}"></div>
+                </div>
+                <span class="rank-pct">{{ s.pct }}%</span>
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+            <p class="empty">No attendance data yet. Start marking attendance ✅</p>
+        {% endif %}
+    </div>
+
+    <div class="card panel">
+        <div class="card-head">
+            <h2>🕒 Recent Activity</h2>
+            <span class="badge badge-purple">{{ total_records }} Records</span>
+        </div>
+
+        {% if recent %}
+        <ul class="activity-list">
+            {% for r in recent %}
+            <li>
+                <div class="activity-dot {{ 'green' if r.status=='Present' else 'red' }}"></div>
+                <div class="activity-info">
+                    <strong>{{ r.student }}</strong>
+                    <small>{{ r.subject }} • {{ r.date }}</small>
+                </div>
+                <span class="tag {{ 'tag-green' if r.status=='Present' else 'tag-red' }}">
+                    {{ r.status }}
+                </span>
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+            <p class="empty">No activity yet. Mark attendance to see live feed 📊</p>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}

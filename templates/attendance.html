@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card">
+    <h2>Mark Attendance</h2>
+    <form method="POST">
+        <div class="row-form">
+            <input type="date" name="date" required>
+            <select name="subject_id" required>
+                <option value="">-- Select Subject --</option>
+                {% for s in subjects %}
+                    <option value="{{ s.id }}">{{ s.code }} - {{ s.name }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit">Save Attendance</button>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th><th>Roll No</th><th>Name</th>
+                    <th>Present</th><th>Absent</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for s in students %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ s.roll_no }}</td>
+                    <td>{{ s.name }}</td>
+                    <td><input type="radio" name="status_{{ s.id }}" value="Present" checked></td>
+                    <td><input type="radio" name="status_{{ s.id }}" value="Absent"></td>
+                </tr>
+            {% else %}
+                <tr><td colspan="5" class="empty">Add students first.</td></tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </form>
+</div>
+{% endblock %}

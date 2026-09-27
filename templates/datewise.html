@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card">
+    <h2>Date-wise Records</h2>
+    <form method="GET" class="row-form">
+        <input type="date" name="date" value="{{ date }}" required>
+        <select name="subject_id">
+            <option value="">All Subjects</option>
+            {% for s in subjects %}
+                <option value="{{ s.id }}" {% if subject_id == s.id|string %}selected{% endif %}>
+                    {{ s.code }} - {{ s.name }}
+                </option>
+            {% endfor %}
+        </select>
+        <button type="submit">Filter</button>
+    </form>
+
+    {% if records %}
+    <table>
+        <thead>
+            <tr><th>Date</th><th>Roll No</th><th>Name</th><th>Subject</th><th>Status</th></tr>
+        </thead>
+        <tbody>
+        {% for r in records %}
+            <tr>
+                <td>{{ r.date }}</td>
+                <td>{{ r.roll_no }}</td>
+                <td>{{ r.student_name }}</td>
+                <td>{{ r.subject_code }}</td>
+                <td class="{{ 'present' if r.status=='Present' else 'absent' }}">{{ r.status }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% elif date %}
+        <p class="empty">No attendance found for {{ date }}.</p>
+    {% endif %}
+</div>
+{% endblock %}
